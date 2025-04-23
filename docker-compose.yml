@@ -11,7 +11,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Australia/Sydney
-      - SERVERURL=YOUR.DOMAIN.COM
+      - SERVERURL=54.79.35.126
       - SERVERPORT=51820
       - PEERS=3
       - PEERDNS=auto
@@ -48,4 +48,21 @@ services:
       - 1337:1337
     volumes:
       - ./strapi/data:/srv/app
+    restart: unless-stopped
+  wg-easy:
+    image: weejewel/wg-easy
+    container_name: wg-easy
+    environment:
+      - WG_HOST=54.79.35.126
+      - PASSWORD=Fireball93`
+      - WG_PORT=51820
+      - WG_DEFAULT_ADDRESS=10.13.13.x
+      - WG_DEFAULT_DNS=1.1.1.1
+    ports:
+      - 51821:51821/tcp
+    volumes:
+      - ./wireguard/config:/etc/wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
     restart: unless-stopped
