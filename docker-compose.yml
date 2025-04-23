@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  wireguard:
+    image: lscr.io/linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Australia/Sydney
+      - SERVERURL=YOUR.DOMAIN.COM
+      - SERVERPORT=51820
+      - PEERS=3
+      - PEERDNS=auto
+      - INTERNAL_SUBNET=10.13.13.0
+    volumes:
+      - ./wireguard/config:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+
+  duplicati:
+    image: lscr.io/linuxserver/duplicati
+    container_name: duplicati
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Australia/Sydney
+    volumes:
+      - ./duplicati/config:/config
+      - /home/ubuntu:/source
+    ports:
+      - 8200:8200
+    restart: unless-stopped
+
+  strapi:
+    image: strapi/strapi
+    container_name: strapi
+    environment:
+      - DATABASE_CLIENT=sqlite
+    ports:
+      - 1337:1337
+    volumes:
+      - ./strapi/data:/srv/app
+    restart: unless-stopped
