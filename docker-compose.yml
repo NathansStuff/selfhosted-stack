@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   wireguard:
@@ -11,13 +11,13 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Australia/Sydney
-      - SERVERURL=54.79.35.126
+      - SERVERURL=auto
       - SERVERPORT=51820
       - PEERDNS=auto
       - INTERNAL_SUBNET=10.13.13.0
+      - ALLOWEDIPS=0.0.0.0/0
     volumes:
       - ./wireguard/config:/config
-      - /lib/modules:/lib/modules
     ports:
       - 51820:51820/udp
     sysctls:
@@ -26,71 +26,30 @@ services:
     networks:
       - default
 
-  duplicati:
-    image: lscr.io/linuxserver/duplicati
-    container_name: duplicati
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Australia/Sydney
-    volumes:
-      - ./duplicati/config:/config
-      - /home/ubuntu:/source
-    ports:
-      - 8200:8200
-    restart: unless-stopped
-    networks:
-      - default
-
-  strapi:
-    image: strapi/strapi
-    container_name: strapi
-    environment:
-      - DATABASE_CLIENT=sqlite
-    ports:
-      - 1337:1337
-    volumes:
-      - ./strapi/data:/srv/app
-    restart: unless-stopped
-    networks:
-      - default
-
   wg-easy:
     image: weejewel/wg-easy
     container_name: wg-easy
     environment:
-      - WG_HOST=54.79.35.126
-      - PASSWORD=Fireball93`
+      - WG_HOST=auto
+      - PASSWORD=Fireball93
       - WG_PORT=51820
       - WG_DEFAULT_ADDRESS=10.13.13.x
       - WG_DEFAULT_DNS=1.1.1.1
-      - WG_ALLOWED_IPS=10.13.13.0/24
+      - WG_ALLOWED_IPS=0.0.0.0/0
     volumes:
       - ./wireguard/config:/etc/wireguard
+    ports:
+      - 51821:51821
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
     restart: unless-stopped
     networks:
-      - private-only
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    volumes:
-      - ./nginx/conf:/etc/nginx/conf.d
-      - ./nginx/certs:/etc/letsencrypt
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-    ports:
-      - 80:80
-      - 443:443
-    restart: unless-stopped
-    networks:
       - default
-      - private-only
 
 networks:
   default:
     driver: bridge
-  private-only:
-    internal: true
+
+volumes:
+  wireguard_modules:
