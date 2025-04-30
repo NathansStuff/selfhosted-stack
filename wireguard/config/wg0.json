@@ -4,5 +4,16 @@
     "publicKey": "tA2FwQrDFDPGQ+/w9+6teb/FrweezwH7Avz1qjT4rT0=",
     "address": "10.13.13.1"
   },
-  "clients": {}
+  "clients": {
+    "4c167609-a2df-4bd5-8373-e448a8b74bb9": {
+      "name": "jeremy",
+      "address": "10.13.13.2",
+      "privateKey": "sIWeCCg8X6i+3T091YBspywNldkMl8uV4afmFIXqHkg=",
+      "publicKey": "qlGvKMQJLAxpAhA17BtJ5UjOb9XmfdYwsTcB/W/8GgU=",
+      "preSharedKey": "YwHU9TWijtng4AEiQOqWILHUdJUhnNPmmtfLIWWwQlk=",
+      "createdAt": "2025-04-30T10:06:14.376Z",
+      "updatedAt": "2025-04-30T10:06:31.487Z",
+      "enabled": true
+    }
+  }
 }
